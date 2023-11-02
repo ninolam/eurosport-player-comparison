@@ -1,15 +1,17 @@
 /* eslint-disable no-param-reassign */
 import { PayloadAction, createSlice } from '@reduxjs/toolkit'
 import { RootState } from '../../store'
-import { Player } from './types'
+import type { Player, PlayerId } from './types'
 
-interface PlayersState {
-    list: Player[]
+interface PlayersState<T> {
+    byId: { [id: PlayerId]: T }; 
+    allIds: PlayerId[]
 }
 
 // Define the initial state using that type
-const initialState: PlayersState = {
-    list: [],
+const initialState: PlayersState<Player> = {
+    byId: {},
+    allIds: [],
 }
 
 
@@ -17,14 +19,16 @@ export const playersSlice = createSlice({
     name: 'players',
     initialState,
     reducers: {
-        setPlayers: (state, action: PayloadAction<Player[]>) => {
-            state.list = action.payload
+        setPlayer: (state, action: PayloadAction<Player>) => {
+            state.byId[action.payload.id] = action.payload
+            state.allIds = Array.from(new Set([...state.allIds, action.payload.id])) 
         }
     }
 })
 
-export const { setPlayers } = playersSlice.actions
+export const { setPlayer } = playersSlice.actions
 
-export const players = (state: RootState) => state.players
+export const getAllPlayers = (state: RootState) => state.players.allIds
+export const getPlayersByID = (state: RootState) => state.players.byId
 
 export default playersSlice.reducer
