@@ -1,10 +1,11 @@
-import React, { useMemo } from 'react';
+import React from 'react';
 import { CircularProgressbar, buildStyles } from 'react-circular-progressbar';
 import "react-circular-progressbar/dist/styles.css";
 import { useAppSelector } from '../../../redux/hooks';
-import { getAllMatchesIds, getAllMatchesByID } from '../../../redux/reducers/matches/reducer';
-import { getPlayersByID } from '../../../redux/reducers/players/reducer';
-import { PlayerId } from '../../../redux/reducers/players/types';
+import { getAllMatchesIds, getAllMatchesByID } from '../../../redux/reducers/matches/selectors';
+import { getPlayersByID } from '../../../redux/reducers/players/selectors';
+
+import type { PlayerId } from '../../../redux/reducers/players/types';
 
 interface Props {
     id: PlayerId
@@ -15,14 +16,16 @@ const PlayerStats = ({ id }: Props) => {
     const matchesById = useAppSelector((state) => getAllMatchesByID(state))
     const player = useAppSelector((state) => getPlayersByID(state))
     const winningMatches =  matches.filter(match => matchesById[match].winner.id === id)
-    const { rank, weight, height, points } = player[id].stats
+    const { age, rank, weight, height, points } = player[id]?.stats || {}
 
     return (
         <div>
+            <p className='mb-4'>{age}</p>
             <p className='mb-4'>{rank}</p>
             <p className='mb-4'>{points}</p>
             <p className='mb-4'>{height / 100} m</p>
-            <p className='mb-4'>{weight / 1000} Kg</p>
+            <p className='mb-8'>{weight / 1000} Kg</p>
+            <p className='mb-4'>{winningMatches.length}W - {matches.length - winningMatches.length}L</p>
 
             <div className='w-20'>
                 <CircularProgressbar

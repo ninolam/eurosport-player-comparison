@@ -1,14 +1,11 @@
-/* eslint-disable no-param-reassign */
 import { PayloadAction, createSlice } from '@reduxjs/toolkit'
-import { RootState } from '../../store'
-import { Match } from './types'
+import type { Match } from './types'
 
 interface matchesState<T> {
     byId: { [id: string]: T };
     allIds: string[]
 }
 
-// Define the initial state using that type
 const initialState: matchesState<Match> = {
     byId: {},
     allIds: [],
@@ -27,8 +24,5 @@ export const matchesSlice = createSlice({
 })
 
 export const { setMatch } = matchesSlice.actions
-
-export const getAllMatchesIds = (state: RootState) => state.matches.allIds
-export const getAllMatchesByID = (state: RootState) => state.matches.byId
 
 export default matchesSlice.reducer

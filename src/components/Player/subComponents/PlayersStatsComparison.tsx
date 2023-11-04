@@ -1,7 +1,8 @@
 import React from 'react';
-import { PlayerId } from '../../../redux/reducers/players/types';
 import PlayerTotalTime from './PlayerTotalTime';
 import PlayerStats from './PlayerStats';
+
+import type { PlayerId } from '../../../redux/reducers/players/types';
 
 interface Props {
     firstId: PlayerId
@@ -16,14 +17,14 @@ const PlayersStatsComparison = ({ firstId, secondId }: Props) => {
             <div className='flex justify-between'>
                 <PlayerStats id={firstId} />
                 <div>
+                    <p className='mb-4 font-bold'>Âge</p>
                     <p className='mb-4 font-bold'>Rank</p>
                     <p className='mb-4 font-bold'>Points</p>
                     <p className='mb-4 font-bold'>Taille</p>
-                    <p className='mb-8 font-bold'>Poids</p>
+                    <p className='mb-16 font-bold'>Poids</p>
                     <p className='font-bold'>Confrontations</p>
                 </div>
                 <PlayerStats id={secondId} />
-
             </div>
             <PlayerTotalTime />
         </div>
