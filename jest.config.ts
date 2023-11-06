@@ -2,8 +2,7 @@ import type { Config } from '@jest/types'
 
 const config: Config.InitialOptions = {
     verbose: false,
-    // preset: "ts-jest",
-    // testEnvironment: "node"
+    preset: "jest-puppeteer",
 }
 
 export default config

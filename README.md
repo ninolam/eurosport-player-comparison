@@ -19,3 +19,5 @@ Then go to [http://localhost:3000/](http://localhost:3000/) to see the project !
 ### To run all the tests
 
 ``` npm run test ```
+
+``` npm run test:e2e ```
