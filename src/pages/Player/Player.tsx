@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
 
 import { useAppDispatch, useAppSelector } from '../../redux/hooks';
@@ -14,37 +14,42 @@ import type { Player as PlayerType } from '../../redux/reducers/players/types';
 
 const Player = () => {
     const dispatch = useAppDispatch()
+    const [isLoading, setIsLoading] = useState(false)
     const params = useParams()
     const { loading, error, data } = useAllPlayersAndMatches();
-
 
     const matches = useAppSelector((state) => getAllMatches(state))
     const players = useAppSelector((state) => getPlayers(state))
 
-    
-    const currentPlayer = (players.find(player => player.id === params.id) as PlayerType)
-    const opponentPlayer = (players.find(player => player.id !== params.id) as PlayerType)
+    const currentPlayer = (players.find(player => player.id === params.id) as PlayerType) || {}
+    const opponentPlayer = (players.find(player => player.id !== params.id) as PlayerType) || {}
+
     const winningMatches = matches.filter(match => match.winner.id === params.id)
     const { age, rank, points, height, weight } = currentPlayer?.stats || {}
 
     useEffect(() => {
+        if (loading) {
+            setIsLoading(true)
+        }
         if (data && (matches.length === 0)) {
             dispatch(setPlayers(data.players))
             dispatch(setMatches(data.matches))
+            setIsLoading(false)
         }
     }, [data, dispatch])
 
-    if (loading || !currentPlayer) return <div>Loading...</div>
+    if (isLoading) return <div>Loading....</div>
     if (error) return <div>Error: {error.message}</div>
 
+    
     const renderPlayerStats = () => (
         <section className='flex justify-center py-8 px-12 text-left flex-wrap'>
-            <img className='max-w-70px h-full lg:max-w-full' alt={currentPlayer.shortname} src={currentPlayer.picture.url} />
+            <img className='max-w-70px h-full lg:max-w-full' alt={currentPlayer.shortname} src={currentPlayer.picture?.url} />
             <div className='ml-8 text-sm lg:text-2xl'>
                 <p className=' uppercase font-bold'>{currentPlayer.firstname} {currentPlayer.lastname}</p>
                 <div className='flex mt-3'>
-                    <img className="mr-5 h-auto w-10" alt={currentPlayer.shortname} src={currentPlayer.country.picture.url} />
-                    <p className='inline-block font-bold'>{currentPlayer.country.code}</p>
+                    <img className="mr-5 h-auto w-10" alt={currentPlayer.shortname} src={currentPlayer.country?.picture?.url} />
+                    <p className='inline-block font-bold'>{currentPlayer.country?.code}</p>
                 </div>
             </div>
             <div className='mt-4 md:ml-10 lg:mt-0 rounded-lg border py-3 px-4 lg:px-8 flex flex-col justify-around w-auto lg:w-72'>

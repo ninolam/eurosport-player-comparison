@@ -1,7 +1,7 @@
 import React from 'react';
 import { useAppSelector } from '../../../redux/hooks';
 import { getAllMatches } from '../../../redux/reducers/matches/selectors';
-import { getTotalTimePlayed } from '../../../helpers/getTotalTimeOfMatch';
+import { getTotalTimePlayed } from '../../../utils/getTotalTimeOfMatch';
 
 const PlayersTotalTime = () => {
     const matchs = useAppSelector((state) => getAllMatches(state))

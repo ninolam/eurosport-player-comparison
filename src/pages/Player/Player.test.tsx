@@ -6,14 +6,16 @@ afterEach(() => {
     cleanup()
 })
 
-describe("PlayerView component", () => {
+describe("Player page", () => {
     render(
         <WrapperWithContext>
             <Player />
         </WrapperWithContext>
     )
 
-    test('get player id from param', async () => {
-        expect(await screen.findByText("Loading...")).toBeInTheDocument()
+    test('test rendering of back link', async () => {
+        const link = screen.findByRole("link")
+        expect(await link).toBeInTheDocument()
+        expect(await link).toHaveTextContent("Retour au comparatif")
     })
 })

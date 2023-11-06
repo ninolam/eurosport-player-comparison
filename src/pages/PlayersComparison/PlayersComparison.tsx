@@ -11,7 +11,7 @@ import PlayersStatsComparison from '../../components/Player/subComponents/Player
 import useAllPlayersAndMatches from '../../api/hooks';
 
 
-const PlayersView = () => {
+const PlayersComparison = () => {
     const dispatch = useAppDispatch()
     const [isLoading, setIsLoading] = useState(false)
     const players = useAppSelector((state) => getPlayers(state))
@@ -28,7 +28,6 @@ const PlayersView = () => {
         }
     }, [data, dispatch])
 
-
     if (isLoading) return <div>Loading....</div>
     if (error) return <div>Error: {error.message}</div>
 
@@ -44,4 +43,4 @@ const PlayersView = () => {
     );
 }
 
-export default PlayersView;
+export default PlayersComparison;

@@ -1,15 +1,15 @@
 import { cleanup, render, screen } from "@testing-library/react"
-import PlayersView from "./PlayersView";
+import PlayersComparison from "./PlayersComparison";
 import WrapperWithContext from "../../helpers/renderWithContext";
 
 afterEach(() => {
     cleanup();
 })
 
-describe("PlayersView component", () => {
+describe("PlayersComparison Page", () => {
     render(
         <WrapperWithContext>
-            <PlayersView />
+            <PlayersComparison />
         </WrapperWithContext>
     )
 

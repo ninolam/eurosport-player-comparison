@@ -1,6 +1,6 @@
 import { PayloadAction, createSlice } from '@reduxjs/toolkit'
 import type { Match } from './types'
-import { getMatchesSortedByDescending } from '../../../helpers/getMatchesSortedByDescending'
+import { getMatchesSortedByDescending } from '../../../utils/getMatchesSortedByDescending'
 
 interface matchesState<T> {
     list: T
