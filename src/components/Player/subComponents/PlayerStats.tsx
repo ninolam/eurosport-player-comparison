@@ -2,21 +2,18 @@ import React from 'react';
 import { CircularProgressbar, buildStyles } from 'react-circular-progressbar';
 import "react-circular-progressbar/dist/styles.css";
 import { useAppSelector } from '../../../redux/hooks';
-import { getAllMatchesIds, getAllMatchesByID } from '../../../redux/reducers/matches/selectors';
-import { getPlayersByID } from '../../../redux/reducers/players/selectors';
+import { getAllMatches } from '../../../redux/reducers/matches/selectors';
 
-import type { PlayerId } from '../../../redux/reducers/players/types';
+import type { Player } from '../../../redux/reducers/players/types';
 
 interface Props {
-    id: PlayerId
+    player: Player
 }
 
-const PlayerStats = ({ id }: Props) => {
-    const matches = useAppSelector((state) => getAllMatchesIds(state))
-    const matchesById = useAppSelector((state) => getAllMatchesByID(state))
-    const player = useAppSelector((state) => getPlayersByID(state))
-    const winningMatches =  matches.filter(match => matchesById[match].winner.id === id)
-    const { age, rank, weight, height, points } = player[id]?.stats || {}
+const PlayerStats = ({ player }: Props) => {
+    const matches = useAppSelector((state) => getAllMatches(state))
+    const winningMatches = matches.filter(match => match.winner.id === player.id)
+    const { age, rank, weight, height, points } = player?.stats || {}
 
     return (
         <div>

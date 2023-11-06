@@ -1,36 +1,36 @@
 import React, { useEffect } from 'react';
-import { Link, useLocation, useParams } from 'react-router-dom';
+import { Link, useParams } from 'react-router-dom';
 
 import { useAppDispatch, useAppSelector } from '../../redux/hooks';
-import { setPlayer } from '../../redux/reducers/players/reducer';
-import { getPlayersByID } from '../../redux/reducers/players/selectors';
-import { setMatch } from '../../redux/reducers/matches/reducer';
-import { getAllMatchesIds, getAllMatchesByID } from '../../redux/reducers/matches/selectors';
+import { setPlayers } from '../../redux/reducers/players/reducer';
+import { getPlayers } from '../../redux/reducers/players/selectors';
+import { setMatches } from '../../redux/reducers/matches/reducer';
+import { getAllMatches } from '../../redux/reducers/matches/selectors';
 
-import GameCard from '../../components/GameCard/GameCard';
-import { getMatchesSortedByDescending } from '../../helpers/getMatchesSortedByDescending';
+import GameCard from '../../components/MatchCard/MatchCard';
 
 import useAllPlayersAndMatches from '../../api/hooks';
+import type { Player as PlayerType } from '../../redux/reducers/players/types';
 
 const Player = () => {
     const dispatch = useAppDispatch()
     const params = useParams()
-    const { state: { opponentId } } = useLocation()
     const { loading, error, data } = useAllPlayersAndMatches();
 
-    const matches = useAppSelector((state) => getAllMatchesIds(state))
-    const matchesById = useAppSelector((state) => getAllMatchesByID(state))
-    const playersByID = useAppSelector((state) => getPlayersByID(state))
 
-    const currentPlayer = playersByID[params.id!]
-    const opponentPlayer = playersByID[opponentId]
-    const winningMatches = matches.filter(match => matchesById[match].winner.id === params.id)
+    const matches = useAppSelector((state) => getAllMatches(state))
+    const players = useAppSelector((state) => getPlayers(state))
+
+    
+    const currentPlayer = (players.find(player => player.id === params.id) as PlayerType)
+    const opponentPlayer = (players.find(player => player.id !== params.id) as PlayerType)
+    const winningMatches = matches.filter(match => match.winner.id === params.id)
     const { age, rank, points, height, weight } = currentPlayer?.stats || {}
 
     useEffect(() => {
-        if (data && (matches.length === 0) ) {
-            data.players.forEach(player => dispatch(setPlayer(player)));
-            getMatchesSortedByDescending(data.matches).forEach(match => dispatch(setMatch(match)));
+        if (data && (matches.length === 0)) {
+            dispatch(setPlayers(data.players))
+            dispatch(setMatches(data.matches))
         }
     }, [data, dispatch])
 
@@ -47,12 +47,12 @@ const Player = () => {
                     <p className='inline-block font-bold'>{currentPlayer.country.code}</p>
                 </div>
             </div>
-            <div className='mt-4 lg:ml-10 lg:mt-0 rounded-lg border py-3 px-4 lg:px-8 flex flex-col justify-around w-72'>
+            <div className='mt-4 md:ml-10 lg:mt-0 rounded-lg border py-3 px-4 lg:px-8 flex flex-col justify-around w-auto lg:w-72'>
                 <p className='text-xs lg:text-xl font-bold'> <span className='uppercase text-stone-400'>Age: </span>{age}</p>
                 <p className='text-xs lg:text-xl font-bold'> <span className='uppercase text-stone-400'>Rank: </span>{rank}</p>
                 <p className='text-xs lg:text-xl font-bold'> <span className='uppercase text-stone-400'>Points: </span>{points}</p>
-                <p className='text-xs lg:text-xl font-bold'> <span className='uppercase text-stone-400'>Poids: </span>{weight / 1000} kg</p>
-                <p className='text-xs lg:text-xl font-bold'> <span className='uppercase text-stone-400'>Taille: </span>{height / 100} m</p>
+                <p className='text-xs lg:text-xl font-bold'> <span className='uppercase text-stone-400'>Poids: </span>{(weight || 0) / 1000} kg</p>
+                <p className='text-xs lg:text-xl font-bold'> <span className='uppercase text-stone-400'>Taille: </span>{(height || 0) / 100} m</p>
             </div>
         </section>
     )
@@ -60,13 +60,12 @@ const Player = () => {
     const renderGamesPlayed = () => (
         <section className='max-w-90 lg:max-w-75 m-auto'>
             <h1 className='text-2xl lg:text-5xl text-left my-8'>Matchs gagnés contre {opponentPlayer.shortname}</h1>
-            {winningMatches.map(match => {
-                const currentMatch = matchesById[match]
-                const { winner, startTime, endTime } = currentMatch
+            {winningMatches.map(currentMatch => {
+                const { startTime, endTime } = currentMatch
                 return (
                     <GameCard
                         key={currentMatch.id}
-                        winner={playersByID[winner.id]}
+                        winner={currentPlayer}
                         opponent={opponentPlayer}
                         startTime={startTime}
                         endTime={endTime}
@@ -81,7 +80,7 @@ const Player = () => {
         <div className="max-w-6xl m-auto">
             <div className={`BackgroundGrayscale text-white	relative flex flex-col justify-center`}>
                 <Link className='text-left mt-4 ml-4' to='/'>
-                    Retour aux comparatifs
+                    Retour au comparatif
                 </Link>
                 {renderPlayerStats()}
             </div>

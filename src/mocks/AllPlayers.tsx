@@ -32,6 +32,29 @@ export const allPlayersData = {
                 height: 183,
                 age: 33,
             },
+        },
+        {
+            id: "player-2",
+            firstname: "Rafael",
+            lastname: "Nadak",
+            shortname: "R.NAD",
+            picture: {
+                url: "https://i.eurosport.com/_iss_/person/pp_clubteam/large/435121.jpg",
+            },
+            sex: "MAN",
+            country: {
+                picture: {
+                    url: "https://i.eurosport.com/_iss_/geo/country/flag/large/2203.png",
+                },
+                code: "ESP",
+            },
+            stats: {
+                rank: 1,
+                points: 1982,
+                weight: 85000,
+                height: 185,
+                age: 33,
+            },
         }
     ],
     matches: [
@@ -42,7 +65,7 @@ export const allPlayersData = {
             },
             startTime: "2022-01-31T07:12:00.000Z",
             endTime: "2022-01-31T16:33:00.000Z",
-        },
+        }
     ]
 }
 

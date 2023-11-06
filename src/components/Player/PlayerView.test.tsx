@@ -1,26 +1,31 @@
-import { cleanup, render, screen } from "@testing-library/react"
+import { cleanup, fireEvent, render, screen } from "@testing-library/react"
 import PlayerView from "./PlayerView";
-import { Provider } from "react-redux";
-import { store } from "../../redux/store";
-import { ApolloProvider } from "@apollo/client";
-import { client } from "../../api/config";
+import { allPlayersData } from "../../mocks/AllPlayers";
+import WrapperWithContext from "../../helpers/renderWithContext";
+import { useState } from "react";
 
-describe("PlayerView", async () => {
-    afterEach(() => {
-        cleanup();
-    })
+afterEach(() => {
+    cleanup()
+})
 
+describe("PlayerView component", () => {
+    const currentPlayer = allPlayersData.players[0]
     render(
-        <ApolloProvider client={client}>
-            <Provider store={store}>
-                <PlayerView id="player-1" />
-            </Provider>
-        </ApolloProvider>
-
+        <WrapperWithContext>
+            <PlayerView player={currentPlayer} />
+        </WrapperWithContext>
     )
 
-    it("should render the correct information in the component", async () => {
-        expect(await screen.getByText("Loading....")).toBeInTheDocument()
+    const link = screen.getAllByRole("link")[0]
+
+    // TEST 1
+    test("Link rendering", () => {
+        expect(link).toBeInTheDocument()
+        fireEvent.click(link)
+        expect(link).toHaveAttribute('href', `/player/${currentPlayer.id}`);
     })
 
+    test("Player name correct", () => {
+        expect(link).toHaveTextContent(`${currentPlayer.firstname} ${currentPlayer.lastname}`)
+    })
 })

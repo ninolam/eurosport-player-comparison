@@ -1,14 +1,12 @@
 import React from 'react';
-import { Player, PlayerId } from '../../../redux/reducers/players/types';
+import type { Player, PlayerId } from '../../../redux/reducers/players/types';
 
 interface Props {
     players: Player[]
     winnerId: PlayerId
 }
 
-const GameImages = ({ players, winnerId }: Props) => {
-    // console.log(players);
-    
+const MatchImages = ({ players, winnerId }: Props) => {
     return (
         <div className="flex relative">
             {players?.map(player => (
@@ -21,4 +19,4 @@ const GameImages = ({ players, winnerId }: Props) => {
     );
 }
 
-export default GameImages;
+export default MatchImages;

@@ -1,13 +1,13 @@
 import React from 'react';
 
 interface Props {
-    startTime: Date
-    endTime: Date
+    startTime: Date | string
+    endTime: Date | string
     firstPlayerName: string
     secondPlayerName: string
 }
 
-const GameInfos = ({ startTime, endTime, firstPlayerName, secondPlayerName }: Props) => {
+const MatchInfos = ({ startTime, endTime, firstPlayerName, secondPlayerName }: Props) => {
     const timePlayed = (new Date(endTime).getHours() - new Date(startTime).getHours())
 
     return (
@@ -23,4 +23,4 @@ const GameInfos = ({ startTime, endTime, firstPlayerName, secondPlayerName }: Pr
     );
 }
 
-export default GameInfos;
+export default MatchInfos;

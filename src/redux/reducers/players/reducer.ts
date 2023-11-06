@@ -1,15 +1,13 @@
 /* eslint-disable no-param-reassign */
 import { PayloadAction, createSlice } from '@reduxjs/toolkit'
-import type { Player, PlayerId } from './types'
+import type { Player } from './types'
 
 interface PlayersState<T> {
-    byId: { [id: PlayerId]: T }; 
-    allIds: PlayerId[]
+    list: T
 }
 
-const initialState: PlayersState<Player> = {
-    byId: {},
-    allIds: [],
+const initialState: PlayersState<Player[]> = {
+    list: []
 }
 
 
@@ -17,13 +15,12 @@ export const playersSlice = createSlice({
     name: 'players',
     initialState,
     reducers: {
-        setPlayer: (state, action: PayloadAction<Player>) => {
-            state.byId[action.payload.id] = action.payload
-            state.allIds = Array.from(new Set([...state.allIds, action.payload.id])) 
+        setPlayers: (state, action: PayloadAction<Player[]>) => {
+            state.list = action.payload
         }
     }
 })
 
-export const { setPlayer } = playersSlice.actions
+export const { setPlayers } = playersSlice.actions
 
 export default playersSlice.reducer

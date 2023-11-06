@@ -1,28 +1,20 @@
-import { cleanup, render, screen, waitFor } from "@testing-library/react"
+import { cleanup, render, screen } from "@testing-library/react"
 import PlayersView from "./PlayersView";
-import { Provider } from "react-redux";
-import { store } from "../../redux/store";
-import { ApolloProvider } from "@apollo/client";
-import { client } from "../../api/config";
-import { MockedProvider } from "@apollo/client/testing";
-import { allPlayersData, successfulAllPlayersMock } from "../../mocks/AllPlayers";
+import WrapperWithContext from "../../helpers/renderWithContext";
 
-test("render players with mocked data", async () => {
- 
+afterEach(() => {
+    cleanup();
+})
 
-     render(
-        <ApolloProvider client={client}>
-            <Provider store={store}>
-                <MockedProvider mocks={successfulAllPlayersMock} addTypename={false}>
-                    <PlayersView />
-                </MockedProvider>
-            </Provider>
-        </ApolloProvider>
-
+describe("PlayersView component", () => {
+    render(
+        <WrapperWithContext>
+            <PlayersView />
+        </WrapperWithContext>
     )
 
-    await waitFor(() => {
-        // expect(screen.getByText('STAN')).toBeInTheDocument();
-      });
-
+    test('should render player correctly', async () => {
+        expect(await screen.findByText("STATISTIQUES")).toBeInTheDocument();
+        expect(await screen.findByText("Âge")).toBeInTheDocument();
+    })
 })

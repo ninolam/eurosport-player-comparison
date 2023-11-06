@@ -1,14 +1,13 @@
 import { PayloadAction, createSlice } from '@reduxjs/toolkit'
 import type { Match } from './types'
+import { getMatchesSortedByDescending } from '../../../helpers/getMatchesSortedByDescending'
 
 interface matchesState<T> {
-    byId: { [id: string]: T };
-    allIds: string[]
+    list: T
 }
 
-const initialState: matchesState<Match> = {
-    byId: {},
-    allIds: [],
+const initialState: matchesState<Match[]> = {
+    list: []
 }
 
 
@@ -16,13 +15,12 @@ export const matchesSlice = createSlice({
     name: 'matches',
     initialState,
     reducers: {
-        setMatch: (state, action: PayloadAction<Match>) => {
-            state.byId[action.payload.id] = action.payload
-            state.allIds = Array.from(new Set([...state.allIds, action.payload.id])) 
+        setMatches: (state, action: PayloadAction<Match[]>) => {
+            state.list = getMatchesSortedByDescending(action.payload)
         }
     }
 })
 
-export const { setMatch } = matchesSlice.actions
+export const { setMatches } = matchesSlice.actions
 
 export default matchesSlice.reducer
